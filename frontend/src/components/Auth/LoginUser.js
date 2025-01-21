@@ -26,24 +26,36 @@ const LoginUser = () => {
       return;
     }
 
-    const userData = {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      phone: formData.phone,
-      is_business: isBusiness,
-      business_name: isBusiness ? formData.business_name : null,
-    };
+ const userData = {
+    name: formData.name,
+    email: formData.email,
+    password: formData.password,
+    phone: formData.phone,
+    is_business: isBusiness,
+    business_name: isBusiness ? formData.business_name : null,
+  };
 
+  try {
     const response = await fetch("http://127.0.0.1:5000/register", {
       method: "POST",
+      mode: "cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
     });
 
+    if (!response.ok) {
+      const data = await response.json();
+      alert(`Error: ${data.message}`);
+      return;
+    }
+
     const data = await response.json();
     alert(data.message);
-  };
+  } catch (error) {
+    console.error("Error during fetch:", error);
+    alert("An error occurred during the registration process.");
+  }
+};
 
   return (
     <div className="container my-5">
